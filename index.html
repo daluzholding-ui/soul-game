@@ -1098,7 +1098,12 @@ let score = 0;
 // for a feature that's a nice-to-have, not core gameplay.
 // ════════════════════════════════════════════
 const MAX_LIVES = 5;
-const LIFE_REGEN_MS = 30 * 60 * 1000;
+// Closed-testing adjustment: testers were hitting the no-lives wall within
+// minutes and abandoning the app rather than waiting 30 min per life. Cut
+// regen to near-instant for the test build so the lives UI/countdown still
+// exists (no structural change, low risk) but never actually blocks play.
+// Revisit this value before any production release with real monetization.
+const LIFE_REGEN_MS = 3 * 1000;
 let lives = MAX_LIVES;
 let nextLifeAt = 0; // timestamp when the next life regenerates (0 = full, no countdown needed)
 let countdownTimerId = null;
@@ -1243,8 +1248,8 @@ saveLivesState();
 const GRAVITY = 0.35;
 const FLAP_VELOCITY = -6.8;
 const MAX_FALL_SPEED = 10;
-const PIPE_GAP_START = 240;
-const PIPE_GAP_MIN = 150;
+const PIPE_GAP_START = 300;
+const PIPE_GAP_MIN = 180;
 const PIPE_WIDTH = 60;
 const PIPE_SPEED_BASE = 3;
 const PIPE_SPACING_BASE = 280;
@@ -1261,12 +1266,13 @@ function currentPipeSpacing() {
   return PIPE_SPACING_BASE * WORLDS[currentWorldIndex].spacingMult;
 }
 
-// Gap shrinks gradually with score, but only after the first 8 points -
+// Gap shrinks gradually with score, but only after the first 20 points -
 // the opening stretch is always easy to build confidence. Never below
-// PIPE_GAP_MIN.
+// PIPE_GAP_MIN. Onramp lengthened and shrink rate slowed after tester
+// feedback that the game felt tight/hard right from the very start.
 function currentGapSize() {
-  if (score < 8) return PIPE_GAP_START;
-  const gap = PIPE_GAP_START - (score - 8) * 2;
+  if (score < 20) return PIPE_GAP_START;
+  const gap = PIPE_GAP_START - (score - 20) * 1.5;
   return Math.max(PIPE_GAP_MIN, gap);
 }
 
