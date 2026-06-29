@@ -784,12 +784,12 @@ dlog('Canvas ready: ' + W + 'x' + H);
 // ════════════════════════════════════════════
 const WORLDS = [
   { name: 'Wanderer',     threshold: 0,   bg: ['#1a0f3d', '#0a0420', '#020108'], starHue: 220, nebHues: [260, 290], nebShape: 'soft',   nebCount: 2, nebAlphaMult: 1.0, lore: 'The void is not empty — it is asleep, just as you are. You wake together.', speedMult: 1.0,  spacingMult: 1.0, pillarStyle: 'drifting',   pillarHue: 265 },
-  { name: 'Seeker',       threshold: 23,  bg: ['#003a4a', '#001824', '#00050a'], starHue: 190, nebHues: [180, 200], nebShape: 'soft',   nebCount: 2, nebAlphaMult: 1.3, lore: 'Every portal you find, the universe finds too. You are searching for each other.', speedMult: 1.04, spacingMult: 0.985, pillarStyle: 'drifting',   pillarHue: 190 },
-  { name: 'Drifter',      threshold: 45,  bg: ['#4a1a00', '#240d00', '#0a0300'], starHue: 30,  nebHues: [20, 45],   nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.5, lore: 'The void resists because it remembers what it lost. Its resistance is your resistance.', speedMult: 1.08, spacingMult: 0.97, pillarStyle: 'fractured',  pillarHue: 28 },
-  { name: 'Voidwalker',   threshold: 75,  bg: ['#3a0050', '#180020', '#050008'], starHue: 290, nebHues: [300, 325], nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.7, lore: 'Where you carry no fear, the dark around you grows calm. You shape it as it shaped you.', speedMult: 1.12, spacingMult: 0.955, pillarStyle: 'fractured',  pillarHue: 300 },
-  { name: 'Starforged',   threshold: 113, bg: ['#00451f', '#001f0d', '#000803'], starHue: 150, nebHues: [140, 165], nebShape: 'soft',   nebCount: 4, nebAlphaMult: 1.9, lore: 'The light returning to you is the same light returning to everything. There was never a difference.', speedMult: 1.17, spacingMult: 0.94, pillarStyle: 'crystalline', pillarHue: 155 },
-  { name: 'Eternal Soul', threshold: 165, bg: ['#4a0020', '#220010', '#0a0004'], starHue: 330, nebHues: [10, 335],  nebShape: 'jagged', nebCount: 4, nebAlphaMult: 2.2, lore: 'You remember now: you were never separate from this place. You were always all of it.', speedMult: 1.22, spacingMult: 0.92, pillarStyle: 'crystalline', pillarHue: 340 },
-  { name: 'The Source',   threshold: 200, bg: ['#3a2f0a', '#1f1805', '#080601'], starHue: 48,  nebHues: [45, 60],   nebShape: 'soft',   nebCount: 5, nebAlphaMult: 2.4, lore: 'The Source was never somewhere else. It was you, dreaming you were small.', speedMult: 1.27, spacingMult: 0.90, isFinal: true, pillarStyle: 'source', pillarHue: 48 }
+  { name: 'Seeker',       threshold: 23,  bg: ['#003a4a', '#001824', '#00050a'], starHue: 190, nebHues: [180, 200], nebShape: 'soft',   nebCount: 2, nebAlphaMult: 1.3, lore: 'Every portal you find, the universe finds too. You are searching for each other.', speedMult: 1.1,  spacingMult: 1.0, pillarStyle: 'drifting',   pillarHue: 190 },
+  { name: 'Drifter',      threshold: 45,  bg: ['#4a1a00', '#240d00', '#0a0300'], starHue: 30,  nebHues: [20, 45],   nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.5, lore: 'The void resists because it remembers what it lost. Its resistance is your resistance.', speedMult: 1.18, spacingMult: 1.0, pillarStyle: 'fractured',  pillarHue: 28 },
+  { name: 'Voidwalker',   threshold: 75,  bg: ['#3a0050', '#180020', '#050008'], starHue: 290, nebHues: [300, 325], nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.7, lore: 'Where you carry no fear, the dark around you grows calm. You shape it as it shaped you.', speedMult: 1.25, spacingMult: 1.0, pillarStyle: 'fractured',  pillarHue: 300 },
+  { name: 'Starforged',   threshold: 113, bg: ['#00451f', '#001f0d', '#000803'], starHue: 150, nebHues: [140, 165], nebShape: 'soft',   nebCount: 4, nebAlphaMult: 1.9, lore: 'The light returning to you is the same light returning to everything. There was never a difference.', speedMult: 1.3,  spacingMult: 1.0, pillarStyle: 'crystalline', pillarHue: 155 },
+  { name: 'Eternal Soul', threshold: 165, bg: ['#4a0020', '#220010', '#0a0004'], starHue: 330, nebHues: [10, 335],  nebShape: 'jagged', nebCount: 4, nebAlphaMult: 2.2, lore: 'You remember now: you were never separate from this place. You were always all of it.', speedMult: 1.34, spacingMult: 1.0, pillarStyle: 'crystalline', pillarHue: 340 },
+  { name: 'The Source',   threshold: 200, bg: ['#3a2f0a', '#1f1805', '#080601'], starHue: 48,  nebHues: [45, 60],   nebShape: 'soft',   nebCount: 5, nebAlphaMult: 2.4, lore: 'The Source was never somewhere else. It was you, dreaming you were small.', speedMult: 1.15, spacingMult: 1.0, isFinal: true, pillarStyle: 'source', pillarHue: 48 }
 ];
 
 // ════════════════════════════════════════════
@@ -824,6 +824,7 @@ let worldBannerUntil = 0; // timestamp (frameCount-based) to keep showing the "e
 let worldLoreUntil = 0; // separate, slightly longer window for the lore sentence
 let worldPauseActive = false; // true during the brief freeze when entering a new world
 let worldPauseUntil = 0; // frameCount-based auto-resume fallback if the player doesn't tap Continue
+let worldEaseInPipesRemaining = 0; // counts down the first few pillars after a world change, which get a gentler gap
 
 // ════════════════════════════════════════════
 // SKINS
@@ -886,6 +887,7 @@ function maybeAdvanceWorld() {
   const result = worldForScore(score);
   if (result.index !== currentWorldIndex) {
     currentWorldIndex = result.index;
+    worldEaseInPipesRemaining = 2; // next 2 pillars after a world change are a touch more generous
     bgGradCacheKey = ''; // force background gradient rebuild
     initNebulae(); // re-init since nebula count/hues differ per world
     worldBannerUntil = frameCount + 120; // show banner for ~2s at 60fps
@@ -1318,18 +1320,20 @@ const PIPE_GAP_START = 300;
 const PIPE_GAP_MIN = 180;
 const PIPE_WIDTH = 60;
 const PIPE_SPEED_BASE = 3;
-const PIPE_SPACING_BASE = 280;
+// PIPE_SPACING_BASE removed - spacing is now derived from REACTION_TIME_SEC (see below)
 
-// Pipe speed and spacing now scale with the current world, not just raw
-// score - so entering a new world feels like a real shift in pace, not
-// just a color change. Speed multiplier is modest and capped so later
-// worlds are harder but never unfair. Spacing shrinks slightly too
-// (tighter pacing) but stays well above the minimum needed to react.
+// Reaction time is now the source of truth, not a fixed pixel gap. As
+// speed increases per world, the required pixel distance automatically
+// grows to compensate, so the player always gets roughly the same
+// REACTION_TIME_SEC seconds to read and respond to the next pillar -
+// fixing the "reaction time silently shrinks at higher speed" issue.
+const REACTION_TIME_SEC = 1.1;
+const FPS_ASSUMED = 60;
 function currentPipeSpeed() {
   return PIPE_SPEED_BASE * WORLDS[currentWorldIndex].speedMult;
 }
 function currentPipeSpacing() {
-  return PIPE_SPACING_BASE * WORLDS[currentWorldIndex].spacingMult;
+  return currentPipeSpeed() * FPS_ASSUMED * REACTION_TIME_SEC;
 }
 
 // Gap shrinks gradually with score, but only after the first 20 points -
@@ -1352,6 +1356,8 @@ let inventory = []; // collected powers waiting to be activated, max 3 slots
 const MAX_INVENTORY = 3;
 let activeEffects = {}; // e.g. { shield: true, slowmo: framesRemaining }
 let frameCount = 0;
+let pipeSpawnCountdown = 0; // px remaining until the next pipe spawns - set after each spawn based on that pillar's actual width
+let lastGapCenter = null; // previous pillar's gap center, used to clamp how far the next one can jump vertically
 let universePulse = 0; // 0-1, decays each frame; spikes on flap to visually tie soul-rhythm to universe-rhythm
 let lastFrameTime = 0; // real timestamp (ms) of the previous render() call, for delta-time calculation
 let deltaTime = 1.0; // normalized so 1.0 == exactly 60fps; computed once per render() call
@@ -1699,6 +1705,9 @@ function renderQuestPanel() {
 function resetGame(startScore) {
   score = startScore || 0;
   frameCount = 0;
+  pipeSpawnCountdown = 0;
+  worldEaseInPipesRemaining = 2;
+  lastGapCenter = null;
   pipes = [];
   crystals = [];
   powerups = [];
@@ -2126,26 +2135,60 @@ function drawPillarRingSource(p, seg, cx, baseHue) {
 // GAME LOGIC
 // ════════════════════════════════════════════
 function spawnPipe() {
-  const gap = currentGapSize();
-  const margin = 80;
-  const gapTop = margin + Math.random() * (H - gap - margin * 2);
+  // Capture how far past the threshold we are (0 in the normal case, more
+  // negative during a frame-rate drop where several spawns catch up at
+  // once). Used below to offset this pillar's spawn x so simultaneous
+  // catch-up spawns land at distinct, correctly-spaced positions instead
+  // of literally stacking on top of each other at x=W.
+  const overshoot = Math.min(0, pipeSpawnCountdown);
 
-  // After score 15, some pipes are wider/thicker than normal - harder to
-  // pass (less horizontal room to react) and visually blunter (more
-  // rounded corners). Capped so it's always still passable.
+  let gap = currentGapSize();
+  if (worldEaseInPipesRemaining > 0) {
+    gap = Math.min(H * 0.55, gap + 60); // noticeably roomier, capped so it never exceeds a sane fraction of screen height
+    worldEaseInPipesRemaining--;
+  }
+  const margin = 80;
+  let gapTop = margin + Math.random() * (H - gap - margin * 2);
+
+  // Clamp how far the gap's vertical center can jump from the previous
+  // pillar's center. Each pillar's gap/spacing is individually safe, but
+  // an extreme combination (e.g. center near the floor, then immediately
+  // near the ceiling) can still demand a diagonal flight path steeper
+  // than the soul's flap/gravity curve can comfortably achieve. Capping
+  // the shift keeps consecutive pillars flowing as one rideable path.
+  const MAX_CENTER_SHIFT = 150;
+  if (lastGapCenter !== null) {
+    const proposedCenter = gapTop + gap / 2;
+    const minCenter = lastGapCenter - MAX_CENTER_SHIFT;
+    const maxCenter = lastGapCenter + MAX_CENTER_SHIFT;
+    const clampedCenter = Math.max(minCenter, Math.min(maxCenter, proposedCenter));
+    gapTop = clampedCenter - gap / 2;
+    gapTop = Math.max(margin, Math.min(H - gap - margin, gapTop));
+  }
+  lastGapCenter = gapTop + gap / 2;
+
+  // After score 15, some pipes are wider/thicker than normal - more
+  // visually varied. Spacing accounts for the actual rolled width below,
+  // so widening this range no longer risks tight pillar-to-pillar gaps.
   let width = PIPE_WIDTH;
   let blunt = false;
-  if (score >= 15 && Math.random() < 0.3) {
-    width = PIPE_WIDTH * (1.4 + Math.random() * 0.5); // 1.4x-1.9x normal width
+  if (currentWorldIndex >= 2 && !WORLDS[currentWorldIndex].isFinal && Math.random() < 0.3) { // Drifter through Eternal Soul: wide pillars; The Source stays calm
+    width = PIPE_WIDTH * (1.4 + Math.random() * 0.6); // 1.4x-2.0x normal width
     blunt = true;
   }
+
+  // Spawn countdown is set in real pixels based on THIS pillar's actual
+  // width, so the gap to the next pillar is always the full clearance
+  // distance regardless of how wide this one rolled - no more risk of
+  // wide pillars eating into a fixed time-based interval.
+  pipeSpawnCountdown += width + currentPipeSpacing();
 
   // After score 8, some pipes gently oscillate vertically instead of
   // staying static - adds variety without changing collision logic
   // (the oscillation just updates gapTop each frame, same as before).
-  const canMove = score >= 8 && Math.random() < 0.4;
+  const canMove = currentWorldIndex >= 3 && !WORLDS[currentWorldIndex].isFinal && Math.random() < 0.4; // Voidwalker through Eternal Soul: drifting gaps; The Source stays still
   pipes.push({
-    x: W,
+    x: W + overshoot,
     speed: currentPipeSpeed(),
     width: width,
     blunt: blunt,
@@ -2272,8 +2315,14 @@ function update() {
   soul.trail.unshift({ x: soul.x, y: soul.y });
   if (soul.trail.length > 16) soul.trail.pop();
 
-  // Spawn pipes - interval also scales with current world's spacing
-  if (frameCount % Math.round(currentPipeSpacing() / currentPipeSpeed()) === 0) {
+  // Spawn pipes - countdown ticks down in actual pixels traveled (scaled
+  // by speed and deltaTime), guaranteeing real on-screen clearance
+  // regardless of pillar width, rather than a fixed time interval. A
+  // while-loop (not if) ensures that even a large deltaTime spike (e.g.
+  // a WebView frame-rate drop) can never skip past the threshold and
+  // lose the overshoot - any leftover carries cleanly into the next gap.
+  pipeSpawnCountdown -= currentPipeSpeed() * timeScale;
+  while (pipeSpawnCountdown <= 0) {
     spawnPipe();
   }
 
