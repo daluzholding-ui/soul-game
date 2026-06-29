@@ -601,9 +601,42 @@
     padding: 4px;
     z-index: 999;
   }
+#rotate-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050108;
+  color: #e8dfff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: inherit;
+  padding: 24px;
+}
+#rotate-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: rotate-hint 1.8s ease-in-out infinite;
+}
+#rotate-text {
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+@keyframes rotate-hint {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+}
 </style>
 </head>
 <body>
+
+<div id="rotate-overlay">
+  <div id="rotate-icon">📱</div>
+  <div id="rotate-text">Please rotate your device<br>back to portrait to play SOUL</div>
+</div>
 
 <canvas id="game-canvas"></canvas>
 
@@ -719,8 +752,24 @@ function handleResize() {
   canvas.height = H;
   initStars();
   initNebulae();
+  checkOrientation();
 }
 window.addEventListener('resize', handleResize);
+
+// The difficulty curve and pipe sizing are tuned for a tall portrait
+// screen (a 180px vertical gap is comfortable on a 900px-tall phone,
+// but eats half a short landscape screen). Rather than rebalancing the
+// whole game for two layouts, landscape is blocked outright with a
+// simple rotate prompt - same approach as most single-orientation
+// arcade games. Gameplay freezes (see update()) so nothing can hit the
+// player while the overlay is up.
+let isLandscape = false;
+function checkOrientation() {
+  isLandscape = window.innerWidth > window.innerHeight;
+  const overlay = document.getElementById('rotate-overlay');
+  if (overlay) overlay.style.display = isLandscape ? 'flex' : 'none';
+}
+checkOrientation();
 
 dlog('Canvas ready: ' + W + 'x' + H);
 
@@ -734,12 +783,12 @@ dlog('Canvas ready: ' + W + 'x' + H);
 // ════════════════════════════════════════════
 const WORLDS = [
   { name: 'Wanderer',     threshold: 0,   bg: ['#1a0f3d', '#0a0420', '#020108'], starHue: 220, nebHues: [260, 290], nebShape: 'soft',   nebCount: 2, nebAlphaMult: 1.0, lore: 'The void is not empty — it is asleep, just as you are. You wake together.', speedMult: 1.0,  spacingMult: 1.0, pillarStyle: 'drifting',   pillarHue: 265 },
-  { name: 'Seeker',       threshold: 23,  bg: ['#003a4a', '#001824', '#00050a'], starHue: 190, nebHues: [180, 200], nebShape: 'soft',   nebCount: 2, nebAlphaMult: 1.3, lore: 'Every portal you find, the universe finds too. You are searching for each other.', speedMult: 1.08, spacingMult: 0.97, pillarStyle: 'drifting',   pillarHue: 190 },
-  { name: 'Drifter',      threshold: 45,  bg: ['#4a1a00', '#240d00', '#0a0300'], starHue: 30,  nebHues: [20, 45],   nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.5, lore: 'The void resists because it remembers what it lost. Its resistance is your resistance.', speedMult: 1.16, spacingMult: 0.94, pillarStyle: 'fractured',  pillarHue: 28 },
-  { name: 'Voidwalker',   threshold: 75,  bg: ['#3a0050', '#180020', '#050008'], starHue: 290, nebHues: [300, 325], nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.7, lore: 'Where you carry no fear, the dark around you grows calm. You shape it as it shaped you.', speedMult: 1.25, spacingMult: 0.91, pillarStyle: 'fractured',  pillarHue: 300 },
-  { name: 'Starforged',   threshold: 113, bg: ['#00451f', '#001f0d', '#000803'], starHue: 150, nebHues: [140, 165], nebShape: 'soft',   nebCount: 4, nebAlphaMult: 1.9, lore: 'The light returning to you is the same light returning to everything. There was never a difference.', speedMult: 1.35, spacingMult: 0.87, pillarStyle: 'crystalline', pillarHue: 155 },
-  { name: 'Eternal Soul', threshold: 165, bg: ['#4a0020', '#220010', '#0a0004'], starHue: 330, nebHues: [10, 335],  nebShape: 'jagged', nebCount: 4, nebAlphaMult: 2.2, lore: 'You remember now: you were never separate from this place. You were always all of it.', speedMult: 1.45, spacingMult: 0.82, pillarStyle: 'crystalline', pillarHue: 340 },
-  { name: 'The Source',   threshold: 200, bg: ['#3a2f0a', '#1f1805', '#080601'], starHue: 48,  nebHues: [45, 60],   nebShape: 'soft',   nebCount: 5, nebAlphaMult: 2.4, lore: 'The Source was never somewhere else. It was you, dreaming you were small.', speedMult: 1.5,  spacingMult: 0.80, isFinal: true, pillarStyle: 'source', pillarHue: 48 }
+  { name: 'Seeker',       threshold: 23,  bg: ['#003a4a', '#001824', '#00050a'], starHue: 190, nebHues: [180, 200], nebShape: 'soft',   nebCount: 2, nebAlphaMult: 1.3, lore: 'Every portal you find, the universe finds too. You are searching for each other.', speedMult: 1.04, spacingMult: 0.985, pillarStyle: 'drifting',   pillarHue: 190 },
+  { name: 'Drifter',      threshold: 45,  bg: ['#4a1a00', '#240d00', '#0a0300'], starHue: 30,  nebHues: [20, 45],   nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.5, lore: 'The void resists because it remembers what it lost. Its resistance is your resistance.', speedMult: 1.08, spacingMult: 0.97, pillarStyle: 'fractured',  pillarHue: 28 },
+  { name: 'Voidwalker',   threshold: 75,  bg: ['#3a0050', '#180020', '#050008'], starHue: 290, nebHues: [300, 325], nebShape: 'jagged', nebCount: 3, nebAlphaMult: 1.7, lore: 'Where you carry no fear, the dark around you grows calm. You shape it as it shaped you.', speedMult: 1.12, spacingMult: 0.955, pillarStyle: 'fractured',  pillarHue: 300 },
+  { name: 'Starforged',   threshold: 113, bg: ['#00451f', '#001f0d', '#000803'], starHue: 150, nebHues: [140, 165], nebShape: 'soft',   nebCount: 4, nebAlphaMult: 1.9, lore: 'The light returning to you is the same light returning to everything. There was never a difference.', speedMult: 1.17, spacingMult: 0.94, pillarStyle: 'crystalline', pillarHue: 155 },
+  { name: 'Eternal Soul', threshold: 165, bg: ['#4a0020', '#220010', '#0a0004'], starHue: 330, nebHues: [10, 335],  nebShape: 'jagged', nebCount: 4, nebAlphaMult: 2.2, lore: 'You remember now: you were never separate from this place. You were always all of it.', speedMult: 1.22, spacingMult: 0.92, pillarStyle: 'crystalline', pillarHue: 340 },
+  { name: 'The Source',   threshold: 200, bg: ['#3a2f0a', '#1f1805', '#080601'], starHue: 48,  nebHues: [45, 60],   nebShape: 'soft',   nebCount: 5, nebAlphaMult: 2.4, lore: 'The Source was never somewhere else. It was you, dreaming you were small.', speedMult: 1.27, spacingMult: 0.90, isFinal: true, pillarStyle: 'source', pillarHue: 48 }
 ];
 
 // ════════════════════════════════════════════
@@ -914,6 +963,22 @@ function endWorldPause() {
   worldPauseUntil = 0;
   const continueBtn = document.getElementById('world-pause-continue');
   if (continueBtn) continueBtn.classList.remove('show');
+
+  // Safety clamp: the world-name/lore overlay freezes the game for a
+  // couple of seconds, during which the player is reading text instead
+  // of watching the screen. Any pipe that was already close when the
+  // freeze started is still just as close the instant it ends, giving
+  // no real reaction time. Push anything within a safe buffer further
+  // out before resuming, exactly the kind of guard already used for
+  // crystal/fragment positioning elsewhere in the game.
+  const SAFE_PIPE_BUFFER = 320;
+  pipes.forEach(function(p) {
+    const aheadOfSoul = p.x + p.width > soul.x;
+    if (aheadOfSoul && p.x < soul.x + SAFE_PIPE_BUFFER) {
+      p.x = soul.x + SAFE_PIPE_BUFFER;
+      p.baseGapTop = p.gapTop; // keep oscillation centered on its current gap, not the old one
+    }
+  });
 }
 
 function updateContinueButton() {
@@ -2163,6 +2228,7 @@ function spawnPipe() {
 
 function update() {
   if (gameState !== 'playing') return;
+  if (isLandscape) return; // frozen until rotated back to portrait, see checkOrientation()
 
   frameCount++;
   if (universePulse > 0) universePulse = Math.max(0, universePulse - 0.025);
