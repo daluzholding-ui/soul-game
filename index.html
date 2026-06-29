@@ -764,8 +764,9 @@ window.addEventListener('resize', handleResize);
 // arcade games. Gameplay freezes (see update()) so nothing can hit the
 // player while the overlay is up.
 let isLandscape = false;
+const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches);
 function checkOrientation() {
-  isLandscape = window.innerWidth > window.innerHeight;
+  isLandscape = isMobileDevice && window.innerWidth > window.innerHeight;
   const overlay = document.getElementById('rotate-overlay');
   if (overlay) overlay.style.display = isLandscape ? 'flex' : 'none';
 }
